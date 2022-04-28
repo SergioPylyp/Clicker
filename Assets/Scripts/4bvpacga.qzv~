@@ -1,0 +1,207 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class ShopMenu : MonoBehaviour
+{
+    public Text moneyText;
+    public Text TSET0;
+    public Text TSET1;
+    public Text TSET2;
+    public Text TSET3;
+    public Text TSET4;
+    public int money;
+    public int K;
+    public int[] SUM;
+    public int[] P;
+    public float FSET0=1, FSET1=1, FSET2=1, FSET3=1, FSET4=1;
+    [SerializeField] int C = 1;
+
+    public string[] arrayTitles;// назва дос€гненн€
+    public Sprite[] arraySprites;// масив картинок дл€ дос€гнень
+    public GameObject button;// шаблон кнопки
+    public GameObject content;
+
+    private List<GameObject> list = new List<GameObject>();
+    private VerticalLayoutGroup _group;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        money = PlayerPrefs.GetInt("money");
+        C = PlayerPrefs.GetInt("C");
+        //total_money = PlayerPrefs.GetInt("total_money");
+        K = PlayerPrefs.GetInt("K");
+
+        FSET0 = PlayerPrefs.GetFloat("FSET0");
+        FSET1 = PlayerPrefs.GetFloat("FSET1");
+        FSET2 = PlayerPrefs.GetFloat("FSET2");
+        FSET3 = PlayerPrefs.GetFloat("FSET3");
+        FSET4 = PlayerPrefs.GetFloat("FSET4");
+
+        P[0] = 10;
+        for (int i = 0; i <= arrayTitles.Length-1; i++)
+        {
+            if (P[i]%10==0)
+            {
+                P[i + 1] *= 5;
+            }
+            else
+            {
+                P[i + 1] *= 2;
+            }
+        }
+
+        RectTransform rectT = content.GetComponent<RectTransform>();
+        rectT.transform.localPosition = new Vector3(0.0f, 0.0f, 0.0f);// нульов≥ кординати дл€ кнопок
+        _group = GetComponent<VerticalLayoutGroup>();
+        setAchievs();
+
+        StartCoroutine(IdleFarm());
+
+    }
+
+    public void RemovedList()// видал€ти вс≥ дос€гненн€ перед setAchievs()
+    {
+        foreach (var elem in list)
+        {
+            Destroy(elem);
+        }
+        list.Clear();
+    }
+
+    void setAchievs()
+    {
+        RectTransform rectT = content.GetComponent<RectTransform>();
+        rectT.transform.localPosition = new Vector3(-360.0f, 0.0f, 0.0f);//
+        RemovedList();
+        if (arrayTitles.Length > 0)
+        {
+            var pr1 = Instantiate(button, transform);// створенн€ образца
+            var h = pr1.GetComponent<RectTransform>().rect.height;// запис висоти
+            var tr = GetComponent<RectTransform>();// створенн€ зм≥нноњ 
+            tr.sizeDelta = new Vector2(tr.rect.width, h * arrayTitles.Length);
+            Destroy(pr1);
+            for (var i = 0; i < arrayTitles.Length; i++)//цикл дос€гнень
+            {
+                //arraySprites = new Sprite[arrayTitles.Length];
+                var pr = Instantiate(button, transform);
+                pr.GetComponentsInChildren<Text>()[0].text = arrayTitles[i];//запис тексту
+                //pr.SetComponentsInChildren<Text>()[1].text = ToString(SUM[i]);
+                pr.GetComponentsInChildren<Image>()[1].sprite = arraySprites[i];//запис ≥конки
+                var i1 = i;
+                pr.GetComponent<Button>().onClick.AddListener(() => GetAchievement(i1));// опрацюванн€ нажиму на кнопки
+                list.Add(pr);// добавити дос€гненн€ до списку
+            }
+        }
+    }
+
+
+    void PriceUpdate()
+    {
+        float KOF[5];
+        SET0 = PlayerPrefs.GetFloat("FSET0");
+        SET1 = PlayerPrefs.GetFloat("FSET1");
+        SET2 = PlayerPrefs.GetFloat("FSET2");
+        SET3 = PlayerPrefs.GetFloat("FSET3");
+        SET4 = PlayerPrefs.GetFloat("FSET4");
+        KOF[0] = FSET0;
+        KOF[1] = FSET1;
+        KOF[2] = FSET2;
+        KOF[3] = FSET3;
+        KOF[4] = FSET4;
+
+        for (int i = 0; i < arrayTitles.Length; i++)
+        {
+            float d = P[i] * KOF[i];
+            SUM[i] = (int)d;
+        }
+    }
+
+    void GetAchievement(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                if (money >= 10 * FSET0)
+                {
+                    money -= SUM[1];
+                    C += 1;
+                    PlayerPrefs.SetInt("money", money);
+                    PlayerPrefs.SetInt("C", C);
+                    PlayerPrefs.SetFloat("SET0", 1);
+                }
+                Debug.Log(id);
+                break;
+            case 1:
+                if (money >= 50 * FSET1)
+                {
+                    money += 50;
+                    C += 5;
+                    PlayerPrefs.SetInt("money", money);
+                    PlayerPrefs.SetInt("C", C);
+                    PlayerPrefs.SetFloat("SET1", 1);
+                }
+                Debug.Log(id);
+                break;
+            case 2:
+                if (money >= 100 * FSET2)
+                {
+                    money += 100;
+                    C += 10;
+                    PlayerPrefs.SetInt("money", money);
+                    PlayerPrefs.SetInt("C", C);
+                    PlayerPrefs.SetFloat("SET2", 1);
+                }
+                Debug.Log(id);
+                break;
+            case 3:
+                if (money >= 500 * FSET3)
+                {
+                    money += 500;
+                    C += 50;
+                    PlayerPrefs.SetInt("money", money);
+                    PlayerPrefs.SetInt("C", C);
+                    PlayerPrefs.SetFloat("SET3", 1);
+                }
+                Debug.Log(id);
+                break;
+            case 4:
+                if (money >= 1000 * FSET4)
+                {
+                    money += 1000;
+                    C += 100;
+                    PlayerPrefs.SetInt("money", money);
+                    PlayerPrefs.SetInt("C", K);
+                    PlayerPrefs.SetFloat("SET4", 1);
+                }
+                Debug.Log(id);
+                break;
+        }
+    }
+
+
+    IEnumerator IdleFarm()
+    {
+        K = PlayerPrefs.GetInt("K");
+        yield return new WaitForSeconds(1);
+        money += K;
+        PlayerPrefs.SetInt("money", money);
+        Debug.Log(K);
+        StartCoroutine(IdleFarm());
+    }
+
+    public void ToMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+        moneyText.text = money.ToString() + " $";
+    }
+}

@@ -1,0 +1,268 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class ShopMenu : MonoBehaviour
+{
+    public Text moneyText;
+    public Text TSET0;
+    public Text TSET1;
+    public Text TSET2;
+    public Text TSET3;
+    public Text TSET4;
+    public int money;
+    public int K;
+    public float FSET0 = 1.0f, FSET1 = 1.0f, FSET2 = 1.0f, FSET3 = 1.0f, FSET4 = 1.0f;
+    public int l = 1;
+    [SerializeField] int C = 1;
+
+    //public string[] arrayTitles;// назва дос€гненн€
+    //public Sprite[] arraySprites;// масив картинок дл€ дос€гнень
+    //public GameObject button;// шаблон кнопки
+    //public GameObject content;
+
+    //private List<GameObject> list = new List<GameObject>();
+    //private VerticalLayoutGroup _group;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        money = PlayerPrefs.GetInt("money");
+        C = PlayerPrefs.GetInt("C");
+        //total_money = PlayerPrefs.GetInt("total_money");
+        K = PlayerPrefs.GetInt("K");
+
+        if (C > 1)
+        {
+            FSET0 = PlayerPrefs.GetFloat("FSET0");
+            FSET1 = PlayerPrefs.GetFloat("FSET1");
+            FSET2 = PlayerPrefs.GetFloat("FSET2");
+            FSET3 = PlayerPrefs.GetFloat("FSET3");
+            FSET4 = PlayerPrefs.GetFloat("FSET4");
+        }
+
+
+        StartCoroutine(IdleFarm());
+    }
+
+
+    public void GetShop0()
+    {
+        float d;
+        int sum0;
+        if (money >= (10 * FSET0))
+        {
+            d = 10 * FSET0;
+            sum0 = (int)d;
+            Debug.Log(sum0);
+            money -= sum0;
+            C += 1;
+            FSET0 = FSET0+0.2f;
+            Debug.Log(sum0);
+            PlayerPrefs.SetInt("money", money);
+            PlayerPrefs.SetInt("C", C);
+            
+            TSET0.text = sum0.ToString();
+        }
+    }
+
+    public void GetShop1()
+    {
+        float d;
+        int sum1;
+        if (money >= 50 * FSET1)
+        {
+            
+            
+            d = 50 * FSET1;
+            sum1 = (int)d;
+            money -= sum1;
+            C += 5;
+            FSET1 += 0.2f;
+            PlayerPrefs.SetInt("money", money);
+            PlayerPrefs.SetInt("C", C);
+            PlayerPrefs.SetFloat("FSET1", FSET1);
+            TSET1.text = sum1.ToString();
+        }
+    }
+
+    public void GetShop2()
+    {
+        float d;
+        int sum2;
+        if (money >= (100 * FSET2))
+        {
+            
+            
+            d = 100 * FSET2;
+            sum2 = (int)d;
+            money -= sum2;
+            C += 1;
+            FSET2 += 0.2f;
+            PlayerPrefs.SetInt("money", money);
+            PlayerPrefs.SetInt("C", C);
+            PlayerPrefs.SetFloat("FSET2", FSET2);
+            TSET2.text = sum2.ToString();
+        }
+    }
+
+    public void GetShop3()
+    {
+        float d;
+        int sum3;
+        if (money >= 500 * FSET3)
+        {
+            
+            
+            d = 500 * FSET3;
+            sum3 = (int)d;
+            money -= sum3;
+            C += 1;
+            FSET3 += 0.2f;
+            PlayerPrefs.SetInt("money", money);
+            PlayerPrefs.SetInt("C", C);
+            PlayerPrefs.SetFloat("FSET3", FSET3);
+            TSET3.text = sum3.ToString();
+        }
+    }
+
+    public void GetShop4()
+    {
+        float d;
+        int sum4;
+        if (money >= 1000 * FSET4)
+        {
+            d = 1000 * FSET1;
+            sum4 = (int)d;
+            money -= sum4;
+            C += 1;
+            FSET4 += 0.2f;
+            PlayerPrefs.SetInt("money", money);
+            PlayerPrefs.SetInt("C", C);
+            PlayerPrefs.SetFloat("FSET4", FSET4);
+            TSET4.text = sum4.ToString();
+        }
+    }
+
+
+    //void GetShop(int id)
+    //{
+    //    float d;
+    //    int sum;
+    //    switch (id)
+    //    {
+    //        case 0:
+    //            if (money >= 10*FSET0)
+    //            {
+    //                d = 10 * FSET0;
+    //                FSET0 = PlayerPrefs.GetFloat("FSET0");
+    //                sum = (int)d;
+    //                money -= sum;
+    //                C += 1;
+    //                FSET0 += 0.2f;
+    //                PlayerPrefs.SetInt("money", money);
+    //                PlayerPrefs.SetInt("C", C);
+    //                PlayerPrefs.SetFloat("FSET0", FSET0);
+    //                TSET0.text = sum.ToString() + " $";
+    //            }
+    //            Debug.Log(id);
+    //            break;
+    //        case 1:
+    //            if (money >= 10 * FSET0)
+    //            {
+    //                d = 10 * FSET0;
+    //                FSET1 = PlayerPrefs.GetFloat("FSET0");
+    //                sum = (int)d;
+    //                money -= sum;
+    //                C += 1;
+    //                FSET1 += 0.2f;
+    //                PlayerPrefs.SetInt("money", money);
+    //                PlayerPrefs.SetInt("C", C);
+    //                PlayerPrefs.SetFloat("FSET0", FSET0);
+    //                TSET1.text = sum.ToString() + " $";
+    //            }
+    //            Debug.Log(id);
+    //            break;
+    //        case 2:
+    //            if (money >= SUM[2])
+    //            {
+    //                money -= SUM[2];
+    //                C += 10;
+    //                FSET2 += 0.2f;
+    //                PlayerPrefs.SetInt("money", money);
+    //                PlayerPrefs.SetInt("C", C);
+    //                PlayerPrefs.SetFloat("FSET2", FSET2);
+    //            }
+    //            Debug.Log(id);
+    //            break;
+    //        case 3:
+    //            if (money >= SUM[3])
+    //            {
+    //                money -= SUM[3];
+    //                C += 50;
+    //                FSET3 += 0.2f;
+    //                PlayerPrefs.SetInt("money", money);
+    //                PlayerPrefs.SetInt("C", C);
+    //                PlayerPrefs.SetFloat("FSET3", FSET3);
+    //                //PriceUpdate();
+    //            }
+    //            Debug.Log(id);
+    //            break;
+    //        case 4:
+    //            if (money >=  SUM[4])
+    //            {
+    //                money -= SUM[4];
+    //                C += 100;
+    //                FSET4 += 0.2f;
+    //                PlayerPrefs.SetInt("money", money);
+    //                PlayerPrefs.SetInt("C", K);
+    //                PlayerPrefs.SetFloat("FSET4", FSET4);
+    //                //PriceUpdate();
+    //            }
+    //            Debug.Log(id);
+    //            break;
+    //    }
+    //}
+
+
+    IEnumerator IdleFarm()
+    {
+        K = PlayerPrefs.GetInt("K");
+        yield return new WaitForSeconds(1);
+        money += K;
+        PlayerPrefs.SetInt("money", money);
+        //Debug.Log(K);
+        StartCoroutine(IdleFarm());
+    }
+
+    public void ToMenu()
+    {
+        PlayerPrefs.SetFloat("FSET0", FSET0);
+        PlayerPrefs.SetFloat("FSET1", FSET1);
+        PlayerPrefs.SetFloat("FSET2", FSET2);
+        PlayerPrefs.SetFloat("FSET3", FSET3);
+        PlayerPrefs.SetFloat("FSET4", FSET4);
+        SceneManager.LoadScene(0);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+        moneyText.text = money.ToString() + " $";
+        int t;
+        t = (int)(FSET0 * 10);
+        TSET0.text = t.ToString();
+        t = (int)(FSET1 * 50);
+        TSET1.text = t.ToString();
+        t = (int)(FSET2 * 100);
+        TSET2.text = t.ToString();
+        t = (int)(FSET3 * 500);
+        TSET3.text = t.ToString();
+        t = (int)(FSET4 * 1000);
+        TSET4.text = t.ToString();
+
+    }
+}
